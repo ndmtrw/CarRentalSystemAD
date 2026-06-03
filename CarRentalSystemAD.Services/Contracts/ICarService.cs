@@ -8,6 +8,10 @@ public interface ICarService
 
     Task<CarViewModel?> GetByIdAsync(int id);
 
+    Task<CarFormModel?> GetFormModelByIdAsync(int id);
+
+    Task<bool> ExistsAsync(int id);
+
     Task AddAsync(CarFormModel model);
 
     Task EditAsync(int id, CarFormModel model);

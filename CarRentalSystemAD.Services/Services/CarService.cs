@@ -33,7 +33,7 @@ public class CarService : ICarService
     public async Task<CarViewModel?> GetByIdAsync(int id)
     {
         return await context.Cars
-            .Where(c => c.Id == id)
+            .Where(c => c.Id == id && !c.IsDeleted)
             .Select(c => new CarViewModel
             {
                 Id = c.Id,
@@ -43,6 +43,30 @@ public class CarService : ICarService
                 ImageUrl = c.ImageUrl
             })
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<CarFormModel?> GetFormModelByIdAsync(int id)
+    {
+        return await context.Cars
+            .Where(c => c.Id == id && !c.IsDeleted)
+            .Select(c => new CarFormModel
+            {
+                Brand = c.Brand,
+                Model = c.Model,
+                Year = c.Year,
+                FuelType = c.FuelType,
+                Transmission = c.Transmission,
+                Seats = c.Seats,
+                PricePerDay = c.PricePerDay,
+                ImageUrl = c.ImageUrl,
+                CategoryId = c.CategoryId
+            })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<bool> ExistsAsync(int id)
+    {
+        return await context.Cars.AnyAsync(c => c.Id == id && !c.IsDeleted);
     }
 
     public async Task AddAsync(CarFormModel model)
@@ -68,7 +92,7 @@ public class CarService : ICarService
     {
         var car = await context.Cars.FindAsync(id);
 
-        if (car == null)
+        if (car == null || car.IsDeleted)
         {
             return;
         }

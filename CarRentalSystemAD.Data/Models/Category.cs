@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace CarRentalSystemAD.Data.Models
+namespace CarRentalSystemAD.Data.Models;
+
+public class Category
 {
-    internal class Category
-    {
-    }
+    public int Id { get; set; }
+
+    [Required]
+    [StringLength(60)]
+    public string Name { get; set; } = null!;
+
+    public ICollection<Car> Cars { get; set; } = new List<Car>();
 }
