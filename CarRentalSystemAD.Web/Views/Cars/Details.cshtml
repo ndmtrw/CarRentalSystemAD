@@ -1,0 +1,24 @@
+﻿@model CarRentalSystemAD.Services.Models.CarViewModel
+
+@{
+    ViewData["Title"] = "Car Details";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <img src="@Model.ImageUrl" class="img-fluid rounded shadow" alt="@Model.Brand @Model.Model" />
+    </div>
+
+    <div class="col-md-6">
+        <h1>@Model.Brand @Model.Model</h1>
+        <p><strong>Year:</strong> @Model.Year</p>
+        <p><strong>Category:</strong> @Model.CategoryName</p>
+        <p><strong>Fuel:</strong> @Model.FuelType</p>
+        <p><strong>Transmission:</strong> @Model.Transmission</p>
+        <p><strong>Seats:</strong> @Model.Seats</p>
+        <p><strong>Price per day:</strong> @Model.PricePerDay.ToString("F2") лв.</p>
+
+        <a asp-controller="Rentals" asp-action="Create" asp-route-carId="@Model.Id" class="btn btn-success">Rent this car</a>
+        <a asp-controller="Cars" asp-action="All" class="btn btn-secondary">Back</a>
+    </div>
+</div>

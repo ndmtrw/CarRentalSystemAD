@@ -18,14 +18,20 @@ public class CarService : ICarService
     public async Task<IEnumerable<CarViewModel>> GetAllAsync()
     {
         return await context.Cars
+            .Include(c => c.Category)
             .Where(c => !c.IsDeleted)
             .Select(c => new CarViewModel
             {
                 Id = c.Id,
                 Brand = c.Brand,
                 Model = c.Model,
+                Year = c.Year,
+                FuelType = c.FuelType,
+                Transmission = c.Transmission,
+                Seats = c.Seats,
                 PricePerDay = c.PricePerDay,
-                ImageUrl = c.ImageUrl
+                ImageUrl = c.ImageUrl,
+                CategoryName = c.Category.Name
             })
             .ToListAsync();
     }
@@ -33,14 +39,20 @@ public class CarService : ICarService
     public async Task<CarViewModel?> GetByIdAsync(int id)
     {
         return await context.Cars
+            .Include(c => c.Category)
             .Where(c => c.Id == id && !c.IsDeleted)
             .Select(c => new CarViewModel
             {
                 Id = c.Id,
                 Brand = c.Brand,
                 Model = c.Model,
+                Year = c.Year,
+                FuelType = c.FuelType,
+                Transmission = c.Transmission,
+                Seats = c.Seats,
                 PricePerDay = c.PricePerDay,
-                ImageUrl = c.ImageUrl
+                ImageUrl = c.ImageUrl,
+                CategoryName = c.Category.Name
             })
             .FirstOrDefaultAsync();
     }
