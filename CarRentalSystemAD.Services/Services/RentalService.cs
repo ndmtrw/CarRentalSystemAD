@@ -14,10 +14,10 @@ public class RentalService : IRentalService
     }
 
     public async Task RentCarAsync(
-        int carId,
-        string userId,
-        DateTime startDate,
-        DateTime endDate)
+    int carId,
+    string userId,
+    DateTime startDate,
+    DateTime endDate)
     {
         var car = await context.Cars.FindAsync(carId);
 
@@ -26,13 +26,20 @@ public class RentalService : IRentalService
             return;
         }
 
+        var totalDays = (endDate - startDate).Days;
+
+        if (totalDays <= 0)
+        {
+            totalDays = 1;
+        }
+
         var rental = new Rental
         {
             CarId = carId,
             UserId = userId,
             StartDate = startDate,
             EndDate = endDate,
-            TotalPrice = (decimal)(endDate - startDate).TotalDays * car.PricePerDay,
+            TotalPrice = totalDays * car.PricePerDay,
             Status = "Active"
         };
 
