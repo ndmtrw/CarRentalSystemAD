@@ -31,6 +31,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IRentalService, RentalService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 var app = builder.Build();
 
