@@ -10,7 +10,12 @@
             <div class="card-body">
                 <h5>Cars</h5>
                 <p>Manage all cars in the system.</p>
-                <a asp-area="" asp-controller="Cars" asp-action="All" class="btn btn-primary">View Cars</a>
+                <a asp-area="Admin"
+                   asp-controller="Cars"
+                   asp-action="All"
+                   class="btn btn-primary">
+                    Manage Cars
+                </a>
                 <a asp-area="" asp-controller="Cars" asp-action="Add" class="btn btn-success">Add Car</a>
             </div>
         </div>

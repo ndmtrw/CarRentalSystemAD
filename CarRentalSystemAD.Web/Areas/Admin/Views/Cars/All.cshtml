@@ -1,0 +1,47 @@
+﻿@model IEnumerable<CarRentalSystemAD.Services.Models.CarViewModel>
+
+@{
+    ViewData["Title"] = "Manage Cars";
+}
+
+<h1>Manage Cars</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Price/Day</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var car in Model)
+        {
+            <tr>
+                <td>@car.Brand</td>
+                <td>@car.Model</td>
+                <td>@car.Year</td>
+                <td>@car.PricePerDay.ToString("F2")</td>
+                <td>
+                    <a asp-area=""
+                       asp-controller="Cars"
+                       asp-action="Details"
+                       asp-route-id="@car.Id"
+                       class="btn btn-info btn-sm">
+                        Details
+                    </a>
+
+                    <a asp-area=""
+                       asp-controller="Cars"
+                       asp-action="Edit"
+                       asp-route-id="@car.Id"
+                       class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
