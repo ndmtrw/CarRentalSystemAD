@@ -1,0 +1,9 @@
+@model IEnumerable<RentalViewModel>
+@{ ViewData["Title"] = "All Rentals"; }
+<h1>All Rentals</h1>
+<table class="table table-striped"><thead><tr><th>Car</th><th>Start</th><th>End</th><th>Total</th><th>Status</th></tr></thead><tbody>
+@foreach (var rental in Model)
+{
+<tr><td>@rental.CarName</td><td>@rental.StartDate.ToShortDateString()</td><td>@rental.EndDate.ToShortDateString()</td><td>@rental.TotalPrice.ToString("F2") лв.</td><td>@rental.Status</td></tr>
+}
+</tbody></table>

@@ -1,0 +1,25 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+<h1>Admin Dashboard</h1>
+<div class="row mt-4" id="stats-container">
+    <div class="col-md-3 mb-3"><div class="card shadow-sm"><div class="card-body text-center"><h5>Cars</h5><h2 id="carsCount">0</h2></div></div></div>
+    <div class="col-md-3 mb-3"><div class="card shadow-sm"><div class="card-body text-center"><h5>Rentals</h5><h2 id="rentalsCount">0</h2></div></div></div>
+    <div class="col-md-3 mb-3"><div class="card shadow-sm"><div class="card-body text-center"><h5>Categories</h5><h2 id="categoriesCount">0</h2></div></div></div>
+    <div class="col-md-3 mb-3"><div class="card shadow-sm"><div class="card-body text-center"><h5>Reviews</h5><h2 id="reviewsCount">0</h2></div></div></div>
+</div>
+<div class="row mt-4">
+    <div class="col-md-4 mb-3"><div class="card shadow-sm h-100"><div class="card-body"><h5>Cars</h5><p>Manage all cars.</p><a asp-area="Admin" asp-controller="Cars" asp-action="All" class="btn btn-primary">Manage Cars</a> <a asp-area="" asp-controller="Cars" asp-action="Add" class="btn btn-success">Add Car</a></div></div></div>
+    <div class="col-md-4 mb-3"><div class="card shadow-sm h-100"><div class="card-body"><h5>Categories</h5><p>Manage categories.</p><a asp-area="Admin" asp-controller="Categories" asp-action="All" class="btn btn-primary">Manage Categories</a></div></div></div>
+    <div class="col-md-4 mb-3"><div class="card shadow-sm h-100"><div class="card-body"><h5>Rentals</h5><p>View all rentals.</p><a asp-area="Admin" asp-controller="Rentals" asp-action="All" class="btn btn-primary">View Rentals</a></div></div></div>
+</div>
+@section Scripts {
+<script>
+fetch('/api/stats').then(r => r.json()).then(data => {
+    document.getElementById('carsCount').textContent = data.carsCount;
+    document.getElementById('rentalsCount').textContent = data.rentalsCount;
+    document.getElementById('categoriesCount').textContent = data.categoriesCount;
+    document.getElementById('reviewsCount').textContent = data.reviewsCount;
+});
+</script>
+}

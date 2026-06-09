@@ -1,0 +1,64 @@
+@model CarQueryModel
+
+@{
+    ViewData["Title"] = "All Cars";
+}
+
+<h1 class="mb-4">Available Cars</h1>
+
+<form method="get" class="row mb-4">
+    <div class="col-md-6">
+        <input name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search by brand, model or category" />
+    </div>
+    <div class="col-md-3">
+        <select name="sortBy" class="form-select">
+            <option value="">Sort by brand</option>
+            <option value="priceAsc">Price ascending</option>
+            <option value="priceDesc">Price descending</option>
+            <option value="yearDesc">Newest first</option>
+            <option value="yearAsc">Oldest first</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+</form>
+
+<div class="row">
+    @foreach (var car in Model.Cars)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="@car.ImageUrl" class="card-img-top" style="height:220px;object-fit:cover;" alt="@car.Brand @car.Model" />
+                <div class="card-body">
+                    <h5 class="card-title">@car.Brand @car.Model</h5>
+                    <p class="card-text">@car.Year · @car.CategoryName</p>
+                    <p>@car.FuelType · @car.Transmission · @car.Seats seats</p>
+                    <p class="fw-bold">@car.PricePerDay.ToString("F2") лв. / day</p>
+                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id" class="btn btn-primary">Details</a>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <a asp-controller="Cars" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
+                        <form asp-controller="Cars" asp-action="Delete" asp-route-id="@car.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : string.Empty)">
+                    <a class="page-link" asp-action="All" asp-route-page="@i" asp-route-searchTerm="@Model.SearchTerm" asp-route-sortBy="@Model.SortBy">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
