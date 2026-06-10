@@ -8,4 +8,5 @@ public interface IRentalService
     Task<IEnumerable<RentalViewModel>> GetByUserIdAsync(string userId);
     Task<IEnumerable<RentalViewModel>> GetAllAsync();
     Task<bool> IsValidDateRangeAsync(DateTime startDate, DateTime endDate);
+    Task<bool> IsCarAvailableAsync(int carId, DateTime startDate, DateTime endDate);
 }

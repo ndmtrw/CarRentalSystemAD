@@ -37,9 +37,18 @@ public class RentalsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(RentalFormModel model)
     {
+        if (!await carService.ExistsAsync(model.CarId))
+        {
+            return NotFound();
+        }
+
         if (!await rentalService.IsValidDateRangeAsync(model.StartDate, model.EndDate))
         {
             ModelState.AddModelError(string.Empty, "End date must be after start date and start date cannot be in the past.");
+        }
+        else if (!await rentalService.IsCarAvailableAsync(model.CarId, model.StartDate, model.EndDate))
+        {
+            ModelState.AddModelError(string.Empty, "This car is already rented for the selected period. Please choose different dates.");
         }
 
         if (!ModelState.IsValid)

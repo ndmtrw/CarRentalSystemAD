@@ -31,6 +31,7 @@ public class CarFormModel
 
     [Required]
     [StringLength(500)]
+    [Url(ErrorMessage = "Please enter a valid URL.")]
     public string ImageUrl { get; set; } = null!;
 
     [Range(1, int.MaxValue)]

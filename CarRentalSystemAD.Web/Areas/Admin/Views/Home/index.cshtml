@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Admin Dashboard";
 }
 
@@ -25,4 +25,76 @@
             </div>
         </div>
     </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5>Rentals</h5>
+                <p>View all customer rentals.</p>
+                <a asp-area="Admin" asp-controller="Rentals" asp-action="All" class="btn btn-primary">View Rentals</a>
+            </div>
+        </div>
+    </div>
 </div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Live Statistics</h5>
+                <button id="refreshStats" class="btn btn-sm btn-outline-secondary">Refresh</button>
+            </div>
+            <div class="card-body" id="statsContainer">
+                <div class="text-center text-muted py-3">
+                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                    Loading statistics...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        async function loadStats() {
+            const container = document.getElementById('statsContainer');
+            try {
+                const response = await fetch('/api/stats');
+                if (!response.ok) throw new Error('Failed to load stats');
+                const data = await response.json();
+                container.innerHTML = `
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 border rounded bg-light">
+                                <h2 class="text-primary fw-bold">${data.carsCount ?? 0}</h2>
+                                <p class="mb-0 text-muted">Total Cars</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 border rounded bg-light">
+                                <h2 class="text-success fw-bold">${data.rentalsCount ?? 0}</h2>
+                                <p class="mb-0 text-muted">Total Rentals</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 border rounded bg-light">
+                                <h2 class="text-warning fw-bold">${data.categoriesCount ?? 0}</h2>
+                                <p class="mb-0 text-muted">Categories</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3 border rounded bg-light">
+                                <h2 class="text-info fw-bold">${data.reviewsCount ?? 0}</h2>
+                                <p class="mb-0 text-muted">Total Reviews</p>
+                            </div>
+                        </div>
+                    </div>`;
+            } catch (e) {
+                container.innerHTML = '<div class="alert alert-danger">Could not load statistics.</div>';
+            }
+        }
+
+        document.getElementById('refreshStats').addEventListener('click', loadStats);
+        loadStats();
+    </script>
+}

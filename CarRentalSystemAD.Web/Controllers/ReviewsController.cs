@@ -32,6 +32,11 @@ public class ReviewsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Add(ReviewFormModel model)
     {
+        if (!await carService.ExistsAsync(model.CarId))
+        {
+            return NotFound();
+        }
+
         if (!ModelState.IsValid)
         {
             return View(model);

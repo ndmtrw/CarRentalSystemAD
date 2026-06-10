@@ -8,6 +8,6 @@ public interface ICategoryService
     Task<CategoryFormModel?> GetByIdAsync(int id);
     Task AddAsync(CategoryFormModel model);
     Task EditAsync(int id, CategoryFormModel model);
-    Task DeleteAsync(int id);
+    Task<bool> DeleteAsync(int id);
     Task<bool> ExistsAsync(int id);
 }

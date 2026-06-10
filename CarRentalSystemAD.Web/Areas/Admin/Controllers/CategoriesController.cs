@@ -80,8 +80,15 @@ public class CategoriesController : Controller
             return NotFound();
         }
 
-        await categoryService.DeleteAsync(id);
-        TempData["SuccessMessage"] = "Category deleted if it was not used by cars.";
+        if (await categoryService.DeleteAsync(id))
+        {
+            TempData["SuccessMessage"] = "Category deleted successfully.";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "This category cannot be deleted because it is used by existing cars.";
+        }
+
         return RedirectToAction(nameof(All));
     }
 }

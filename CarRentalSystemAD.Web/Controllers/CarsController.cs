@@ -9,11 +9,13 @@ public class CarsController : Controller
 {
     private readonly ICarService carService;
     private readonly IReviewService reviewService;
+    private readonly ICategoryService categoryService;
 
-    public CarsController(ICarService carService, IReviewService reviewService)
+    public CarsController(ICarService carService, IReviewService reviewService, ICategoryService categoryService)
     {
         this.carService = carService;
         this.reviewService = reviewService;
+        this.categoryService = categoryService;
     }
 
     [AllowAnonymous]
@@ -38,8 +40,9 @@ public class CarsController : Controller
     }
 
     [Authorize(Roles = "Administrator")]
-    public IActionResult Add()
+    public async Task<IActionResult> Add()
     {
+        ViewBag.Categories = await categoryService.GetAllAsync();
         return View(new CarFormModel());
     }
 
@@ -48,8 +51,14 @@ public class CarsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Add(CarFormModel model)
     {
+        if (!await categoryService.ExistsAsync(model.CategoryId))
+        {
+            ModelState.AddModelError(nameof(model.CategoryId), "Please select a valid category.");
+        }
+
         if (!ModelState.IsValid)
         {
+            ViewBag.Categories = await categoryService.GetAllAsync();
             return View(model);
         }
 
@@ -68,6 +77,7 @@ public class CarsController : Controller
             return NotFound();
         }
 
+        ViewBag.Categories = await categoryService.GetAllAsync();
         return View(car);
     }
 
@@ -76,8 +86,14 @@ public class CarsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, CarFormModel model)
     {
+        if (!await categoryService.ExistsAsync(model.CategoryId))
+        {
+            ModelState.AddModelError(nameof(model.CategoryId), "Please select a valid category.");
+        }
+
         if (!ModelState.IsValid)
         {
+            ViewBag.Categories = await categoryService.GetAllAsync();
             return View(model);
         }
 

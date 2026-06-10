@@ -19,7 +19,10 @@ public class RentalService : IRentalService
     {
         var car = await context.Cars.FindAsync(carId);
 
-        if (car == null || car.IsDeleted || !await IsValidDateRangeAsync(startDate, endDate))
+        if (car == null
+            || car.IsDeleted
+            || !await IsValidDateRangeAsync(startDate, endDate)
+            || !await IsCarAvailableAsync(carId, startDate, endDate))
         {
             return;
         }
@@ -77,5 +80,14 @@ public class RentalService : IRentalService
     public Task<bool> IsValidDateRangeAsync(DateTime startDate, DateTime endDate)
     {
         return Task.FromResult(startDate.Date >= DateTime.Today && endDate.Date > startDate.Date);
+    }
+
+    public async Task<bool> IsCarAvailableAsync(int carId, DateTime startDate, DateTime endDate)
+    {
+        return !await context.Rentals.AnyAsync(r =>
+            r.CarId == carId
+            && r.Status == "Active"
+            && r.StartDate < endDate.Date
+            && startDate.Date < r.EndDate);
     }
 }

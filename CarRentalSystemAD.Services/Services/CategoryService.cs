@@ -50,17 +50,18 @@ public class CategoryService : ICategoryService
         await context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
         var category = await context.Categories.Include(c => c.Cars).FirstOrDefaultAsync(c => c.Id == id);
 
         if (category == null || category.Cars.Any())
         {
-            return;
+            return false;
         }
 
         context.Categories.Remove(category);
         await context.SaveChangesAsync();
+        return true;
     }
 
     public async Task<bool> ExistsAsync(int id)
